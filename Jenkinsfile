@@ -2,6 +2,7 @@ pipeline {
 	agent any
 	environment {
 		PATH=/usr/share/man/man1/bin:$PATH
+	}
 	stages {
 		stage("git"){
 			steps{
