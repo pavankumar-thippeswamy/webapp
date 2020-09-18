@@ -11,7 +11,9 @@ pipeline {
 		}
 		stage("build"){
 			steps{
-				sh "mvn clean install"
+				sh ''' pwd
+				
+				mvn clean install'''
 			}
 		}
 	}
