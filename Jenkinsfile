@@ -1,19 +1,17 @@
 pipeline {
 	agent any
-	environment{
-		PATH= "/usr/share/man/man1/bin:$PATH"
-	}
+
 	stages {
-		stage("git"){
-			steps{
-				git credentialsID: 'pavankumar-thippeswamy', url: 'https://github.com/pavankumar-thippeswamy/webapp.git'
-			}
-		}
-		stage("build"){
-			steps{
-				sh ''' pwd
-				
-				mvn clean install'''
-			}
-		}
-	}
+		stage ('build') {
+			steps {
+				sh '''  pwd
+					if [[ -d './webapp' ]]; then 
+						cd './webapp' && git pull 
+					else 
+						git clone https://github.com/pavankumar-thippeswamy/webapp.git && cd ./webapp
+					fi
+					mvn clean install'''
+			      }
+		       }
+	       }
+         }
