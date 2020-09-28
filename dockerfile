@@ -1,8 +1,13 @@
-FROM maven:3.5-jdk-8 as BUILD
-COPY src /usr/src/myapp/src
-COPY pom.xml /usr/src/myapp
-RUN mvn -f /usr/src/myapp/pom.xml clean package
+FROM ubuntu:latest as build
+WORKDIR /home/webapp/
+RUN apt-get update
+RUN apt-get install maven -y
+RUN apt-get install git -y
+RUN git init
+RUN git pull https://github.com/pavankumar-thippeswamy/webapp.git
+RUN mvn -X package
 
-FROM tomcat:9.0
-COPY --from=BUILD /usr/src/myapp/target/*.war /usr/local/tomcat/webapps/hello-world.war
+FROM tomcat:8.0.41-jre8
+COPY --from=build /home/webapp/target/*.war /usr/local/tomcat/webapps/
 EXPOSE 8080
+CMD ["catalina.sh","run"]
